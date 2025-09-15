@@ -1,0 +1,25 @@
+VERSION = 1,
+
+option ClanRestrictions.MaxSafehouseMembers
+{
+	type = integer, min = 0, max = 60, default = 10,
+	page = ClanRestrictions, translation = ClanRestrictions_MaxSafehouseMembers,
+}
+
+option ClanRestrictions.MaxSafehouseOfficers
+{
+	type = integer, min = 0, max = 60, default = 3,
+	page = ClanRestrictions, translation = ClanRestrictions_MaxSafehouseOfficers,
+}
+
+option ClanRestrictions.OfficersCanKick
+{
+	type = boolean, default = true,
+	page = ClanRestrictions, translation = ClanRestrictions_OfficersCanKick,
+} 
+
+option ClanRestrictions.OfficersCanInvite
+{
+	type = boolean, default = true,
+	page = ClanRestrictions, translation = ClanRestrictions_OfficersCanInvite,
+}

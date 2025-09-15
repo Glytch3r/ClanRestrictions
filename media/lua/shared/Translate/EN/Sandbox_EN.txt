@@ -1,0 +1,17 @@
+Sandbox_EN = {
+    Sandbox_ClanRestrictions = "Clan Restrictions",
+
+	Sandbox_ClanRestrictions_MaxSafehouseMembers= "Max Safehouse Members",
+	Sandbox_ClanRestrictions_MaxSafehouseMembers_tooltip = "Set to 0 to disable limits",
+
+	Sandbox_ClanRestrictions_MaxSafehouseOfficers = "Max Safehouse Officers",
+	Sandbox_ClanRestrictions_MaxSafehouseOfficers_tooltip = "Set to 0 to disable Officers",
+    
+    
+	Sandbox_ClanRestrictions_OfficersCanKick = "Officers Can Kick",
+
+	Sandbox_ClanRestrictions_OfficersCanInvite = "Officers Can Invite",
+
+    
+}
+
