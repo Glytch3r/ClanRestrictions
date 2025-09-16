@@ -25,6 +25,18 @@
 if isClient() then return end
 ClanRestrictions = ClanRestrictions or {}
 
+function ClanRestrictions.updateData(data)
+    for dataKey, value in pairs(data) do
+        ClanRestrictionsData[dataKey] = value
+    end        
+    for dataKey, _ in pairs(ClanRestrictionsData) do
+        if data[dataKey] == nil then
+            ClanRestrictionsData[dataKey] = nil
+        end
+    end        
+    return ClanRestrictionsData
+end
+
 function ClanRestrictions.initServer()
     ClanRestrictionsData = ModData.getOrCreate("ClanRestrictionsData")
 end
@@ -36,14 +48,6 @@ function ClanRestrictions.OnReceiveGlobalModData(key, data)
     end  
 end
 Events.OnReceiveGlobalModData.Add(ClanRestrictions.OnReceiveGlobalModData)
-
-function ClanRestrictions.updateData(data)
-    for key, value in pairs(data) do
-        if key ~= "state" then
-            ClanRestrictionsData[key] = value
-        end
-    end
-end
 
 function ClanRestrictions.sync(module, command, player, args)
     if module == "ClanRestrictions" then 

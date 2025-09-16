@@ -23,3 +23,10 @@ option ClanRestrictions.OfficersCanInvite
 	type = boolean, default = true,
 	page = ClanRestrictions, translation = ClanRestrictions_OfficersCanInvite,
 }
+
+
+option ClanRestrictions.AnySquareAccess
+{
+	type = boolean, default = false,
+	page = ClanRestrictions, translation = ClanRestrictions_AnySquareAccess,
+} 

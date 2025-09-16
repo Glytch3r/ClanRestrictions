@@ -23,15 +23,6 @@
 require "ISUI/ISPanelJoypad"
 
 ClanRestrictions = ClanRestrictions or {}
-
-function ClanRestrictions.getFactionName(pl)
-    pl = pl or getPlayer()
-    if not pl then return nil end
-    local fac = Faction.getPlayerFaction(pl)
-    return fac and fac:getName() or nil
-end
-
-
 ClanRestrictions.FactionUIList = {
     ISFactionUI,
     ISCreateFactionUI,
@@ -44,6 +35,12 @@ ClanRestrictions.FactionUIRefs = {
     "onQuitFactionUI",
     "onRemovePlayerFromFactionUI",
 }
+function ClanRestrictions.getFactionName(pl)
+    pl = pl or getPlayer()
+    if not pl then return nil end
+    local fac = Faction.getPlayerFaction(pl)
+    return fac and fac:getName() or nil
+end
 
 function ClanRestrictions.getPlayerFaction(targ)
     targ = targ or getPlayer() 
@@ -182,46 +179,7 @@ end
 
 Events.OnPlayerUpdate.Add(ClanRestrictions.FactionLockHandler)
 
-local hook = ISFactionUI.onAnswerFactionInvite
-function ISFactionUI:onAnswerFactionInvite(button)
-    if ISFactionUI.inviteDialogs then
-        ISFactionUI.inviteDialogs[button.parent.host] = nil
-    end
-    if ClanRestrictions.isFactionLocked() then
-        if button.internal == "OK" then
-            print("ClanRestrictions.isFactionLocked")
-            button.parent.ui:setVisible(false);
-            button.parent.ui:removeFromUIManager();
-        end
-    else
-        hook(self, button)
-    end
-end
-
-local hook = ISFactionUI.onChangeTitle
-function ISFactionUI:onChangeTitle(button)
-    ClanRestrictions.onChangeTitleUI = button.parent.ui    
-    hook(self, button)
-end
-
-local hook = ISFactionUI.onChangeTag
-function ISFactionUI:onChangeTag(button)
-    ClanRestrictions.onChangeTagUI = button.parent.ui    
-    hook(self, button)
-end
-
-local hook = ISFactionUI.onQuitFaction
-function ISFactionUI:onQuitFaction(button)
-    ClanRestrictions.onQuitFactionUI = button.parent.ui    
-    hook(self, button)
-end 
-
-local hook = ISFactionUI.onRemovePlayerFromFaction
-function ISFactionUI:onRemovePlayerFromFaction(button)
-    ClanRestrictions.onRemovePlayerFromFactionUI = button.parent.ui    
-    hook(self, button)
-end
-
+--[[ 
 local hook = ISFactionUI.updateButtons
 function ISFactionUI:updateButtons()
     hook(self)
@@ -238,6 +196,7 @@ function ISFactionUI:updateButtons()
     
     local pl = getPlayer()
     local safehouseTitle = self.faction and self.faction:getName() or ""
+
     local isOfficer = ClanRestrictions.isOfficer(pl, safehouseTitle)
     
     if SandboxVars.ClanRestrictions.OfficersCanInvite and isOfficer then
@@ -254,15 +213,7 @@ function ISFactionUI:updateButtons()
         end
     end
 end
-
-local hook = ISFactionUI.prerender
-function ISFactionUI:prerender()
-    if ClanRestrictions.isFactionLocked() and not self.isAdmin then
-        self:close()
-        return
-    end
-    hook(self)
-end
+ ]]
 
 --[[ local hook = ISFactionUI.populateList
 function ISFactionUI:populateList()

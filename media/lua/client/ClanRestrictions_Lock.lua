@@ -45,7 +45,7 @@ function ClanRestrictions.setFactionLocked(isLocked)
     ClanRestrictionsData.isFactionLocked = isLocked
     ModData.transmit("ClanRestrictionsData")
 end
-
+-----------------------            ---------------------------
 local hookCreate = ISUserPanelUI.createChildren
 function ISUserPanelUI:createChildren()
     hookCreate(self)
