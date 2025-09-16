@@ -30,7 +30,21 @@ function ISSafehouseUI:updateButtons()
     self.addPlayer.enable    = (isOwner or hasPrivilegedAccessLevel or canOfficerInvite) and not isFull
 end
 -----------------------            ---------------------------
+local hook = ISSafehouseAddPlayerUI.prerender
+function ISSafehouseAddPlayerUI:prerender()
+    hook(self)
 
+    local pl = getPlayer()
+    local myFaction = Faction.getPlayerFaction(pl:getUsername())
+    local sel = self.selectedPlayer
+    local targetFaction = sel and Faction.getPlayerFaction(sel) or nil
+
+    if sel and myFaction and targetFaction and myFaction:getName() ~= targetFaction:getName() then
+        self.addPlayer.enable = false
+    end
+end
+
+-----------------------            ---------------------------
 local hook = ISFactionUI.onAnswerFactionInvite
 function ISFactionUI:onAnswerFactionInvite(button)
     if ISFactionUI.inviteDialogs then
@@ -79,3 +93,5 @@ function ISFactionUI:prerender()
     end
     hook(self)
 end
+
+-----------------------            ---------------------------
