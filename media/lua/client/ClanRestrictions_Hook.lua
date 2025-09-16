@@ -95,3 +95,8 @@ function ISFactionUI:prerender()
 end
 
 -----------------------            ---------------------------
+local adminHook = ISAdminPanelUI.updateButtons
+function ISAdminPanelUI:updateButtons()
+    adminHook(self)
+    self.seeFactionBtn.enable = not ClanRestrictions.isFactionLocked() 
+end

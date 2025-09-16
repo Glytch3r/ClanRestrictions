@@ -45,6 +45,8 @@ Events.OnInitGlobalModData.Add(ClanRestrictions.initServer)
 function ClanRestrictions.OnReceiveGlobalModData(key, data)
     if key == "ClanRestrictionsData" or  key == "ClanRestrictions" then
         ClanRestrictions.updateData(data)  
+        ModData.transmit("ClanRestrictionsData")
+
     end  
 end
 Events.OnReceiveGlobalModData.Add(ClanRestrictions.OnReceiveGlobalModData)

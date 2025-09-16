@@ -20,6 +20,22 @@ function ClanRestrictions.getOfficers(sh)
     end
     return result
 end
+function ClanRestrictions.getOfficerMembers(sh)
+    sh = sh or SafeHouse.hasSafehouse(getPlayer())
+    if not sh then return {} end
+    local members = sh:getPlayers()
+    local result  = {}
+    for i = 0, members:size() - 1 do
+        local name = members:get(i)
+        if ClanRestrictionsData
+            and ClanRestrictionsData.officers
+            and ClanRestrictionsData.officers[name]
+        then
+            table.insert(result, name)
+        end
+    end
+    return result
+end
 
 function ClanRestrictions.getOfficersCount(sh)
     sh = sh or  SafeHouse.hasSafehouse(getPlayer())
