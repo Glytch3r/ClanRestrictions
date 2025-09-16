@@ -139,6 +139,10 @@ function ClanRestrictions.FactionLockHandler()
             ISFactionUI.instance:close()
             ISFactionUI.instance = nil
         end
+        if ISFactionsList.instance then
+            ISFactionsList.instance:close()
+            ISFactionsList.instance = nil
+        end
         if ISCreateFactionUI.instance then
             ISCreateFactionUI.instance:close()
             ISCreateFactionUI.instance = nil
@@ -174,10 +178,26 @@ function ClanRestrictions.FactionLockHandler()
             ClanRestrictions.onChangeTitleUI:removeFromUIManager();
             ClanRestrictions.onChangeTitleUI = nil
         end
+
+
+
     end
 end
 
 Events.OnPlayerUpdate.Add(ClanRestrictions.FactionLockHandler)
+
+
+
+
+local hook = ISFactionsList.prerender
+function ISFactionsList:prerender()
+    hook(self)
+    if ClanRestrictions.isFactionLocked() then   
+        self.viewBtn.enable = false;
+    end
+end
+
+
 
 --[[ 
 local hook = ISFactionUI.updateButtons
