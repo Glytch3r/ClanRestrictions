@@ -26,45 +26,40 @@ if isClient() then return end
 ClanRestrictions = ClanRestrictions or {}
 
 function ClanRestrictions.updateData(data)
-    for dataKey, value in pairs(data) do
-        ClanRestrictionsData[dataKey] = value
-    end        
-    for dataKey, _ in pairs(ClanRestrictionsData) do
-        if data[dataKey] == nil then
-            ClanRestrictionsData[dataKey] = nil
+    for k, v in pairs(data) do
+        ClanRestrictionsData[k] = v
+    end
+    for k, _ in pairs(ClanRestrictionsData) do
+        if data[k] == nil then
+            ClanRestrictionsData[k] = nil
         end
-    end        
+    end
+    ModData.add("ClanRestrictionsData", ClanRestrictionsData)
+    ModData.transmit("ClanRestrictionsData")
     return ClanRestrictionsData
 end
 
 function ClanRestrictions.initServer()
     ClanRestrictionsData = ModData.getOrCreate("ClanRestrictionsData")
+    ModData.add("ClanRestrictionsData", ClanRestrictionsData)
 end
 Events.OnInitGlobalModData.Add(ClanRestrictions.initServer)
 
 function ClanRestrictions.OnReceiveGlobalModData(key, data)
-    if key == "ClanRestrictionsData" or  key == "ClanRestrictions" then
-        ClanRestrictions.updateData(data)  
-        ModData.transmit("ClanRestrictionsData")
-
-    end  
+    if key == "ClanRestrictionsData" or key == "ClanRestrictions" then
+        ClanRestrictions.updateData(data)
+    end
 end
 Events.OnReceiveGlobalModData.Add(ClanRestrictions.OnReceiveGlobalModData)
 
 function ClanRestrictions.sync(module, command, player, args)
-    if module == "ClanRestrictions" then 
-        if command == "Update" and args.data then
-            ClanRestrictionsData = args.data
-            ModData.add('ClanRestrictionsData', ClanRestrictionsData)
-            ModData.transmit("ClanRestrictionsData")
-        elseif command == "RequestSync" then
-            sendServerCommand(player, "ClanRestrictions", "Update", {data = ClanRestrictionsData})
-        elseif command == "Check" then
-        elseif command == "Assign" then
-            if not args.data then return end
-        end
-        sendServerCommand(player, "ClanRestrictions", tostring(command), args)
+    if module ~= "ClanRestrictions" then return end
+
+    if command == "Update" and args.data then
+        ClanRestrictions.updateData(args.data)
+    elseif command == "RequestSync" then
+        sendServerCommand(player, "ClanRestrictions", "Update", { data = ClanRestrictionsData })
+    elseif command == "Assign" and args.data then
     end
 end
 Events.OnClientCommand.Add(ClanRestrictions.sync)
-

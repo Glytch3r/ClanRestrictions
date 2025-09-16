@@ -61,7 +61,7 @@ function ClanRestrictions.disbandListener()
 
     for username, _ in pairs(ClanRestrictionsData.officers) do
         if not SafeHouse.hasSafehouse(username) then
-            ClanRestrictionsData.officers[username] = nil
+            ClanRestrictions.setOfficer(username, true)
         end
     end
 
