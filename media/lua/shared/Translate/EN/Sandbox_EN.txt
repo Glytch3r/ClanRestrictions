@@ -11,6 +11,8 @@ Sandbox_EN = {
 	Sandbox_ClanRestrictions_OfficersCanKick = "Officers Can Kick",
 
 	Sandbox_ClanRestrictions_OfficersCanInvite = "Officers Can Invite",
+	Sandbox_ClanRestrictions_OfficersAssignRank = "Officers Can Promote/Demote Members",
+
 
 	Sandbox_ClanRestrictions_AnySquareAccess = "Any Square Access",
 	Sandbox_ClanRestrictions_AnySquareAccess_tooltip  = "Safehouse Contextmenu is always available",

@@ -61,11 +61,12 @@ function ClanRestrictions.disbandListener()
 
     for username, _ in pairs(ClanRestrictionsData.officers) do
         if not SafeHouse.hasSafehouse(username) then
-            ClanRestrictions.setOfficer(username, true)
+            ClanRestrictions.setOfficer(username, false)
+            ClanRestrictions.sendToServer()
         end
     end
-
-    ModData.transmit("ClanRestrictionsData")
+    ClanRestrictions.sendToServer()
+    --ModData.transmit("ClanRestrictionsData")
 end
 
 Events.OnSafehousesChanged.Add(ClanRestrictions.disbandListener)

@@ -1,5 +1,23 @@
 
 ClanRestrictions = ClanRestrictions or {}
+-----------------------   ISSafehouseUI         ---------------------------
+
+local receiveInvite_orig = ISSafehouseUI.ReceiveSafehouseInvite
+
+function ISSafehouseUI.ReceiveSafehouseInvite(safehouse, host)
+    local pl = getPlayer()
+    if pl then
+        local inviterFaction = Faction.getPlayerFaction(host)
+        local inviteeFaction = Faction.getPlayerFaction(pl)
+        if inviterFaction and inviteeFaction
+           and inviterFaction:getName() ~= inviteeFaction:getName() then
+            return 
+        end
+    end
+    return receiveInvite_orig(safehouse, host)
+end
+
+
 local updateButtons_hook = ISSafehouseUI.updateButtons
 function ISSafehouseUI:updateButtons()
     updateButtons_hook(self)
@@ -29,7 +47,7 @@ function ISSafehouseUI:updateButtons()
     self.removePlayer.enable = isOwner or hasPrivilegedAccessLevel or canOfficerKick
     self.addPlayer.enable    = (isOwner or hasPrivilegedAccessLevel or canOfficerInvite) and not isFull
 end
------------------------            ---------------------------
+-----------------------   ISSafehouseAddPlayerUI         ---------------------------
 local hook = ISSafehouseAddPlayerUI.prerender
 function ISSafehouseAddPlayerUI:prerender()
     hook(self)
@@ -44,7 +62,7 @@ function ISSafehouseAddPlayerUI:prerender()
     end
 end
 
------------------------            ---------------------------
+-----------------------    ISFactionUI        ---------------------------
 local hook = ISFactionUI.onAnswerFactionInvite
 function ISFactionUI:onAnswerFactionInvite(button)
     if ISFactionUI.inviteDialogs then
@@ -84,19 +102,87 @@ function ISFactionUI:onRemovePlayerFromFaction(button)
     ClanRestrictions.onRemovePlayerFromFactionUI = button.parent.ui    
     hook(self, button)
 end
------------------------            ---------------------------
-local hook = ISFactionUI.prerender
+
+local hookISFactionUI = ISFactionUI.prerender
 function ISFactionUI:prerender()
     if ClanRestrictions.isFactionLocked() and not self.isAdmin then
         self:close()
         return
     end
-    hook(self)
+    hookISFactionUI(self)
+end
+-----------------------  ISFactionsList          ---------------------------
+
+local hookISFactionsList = ISFactionsList.prerender
+function ISFactionsList:prerender()
+    hookISFactionsList(self)
+    if ClanRestrictions.isFactionLocked() then   
+        self.viewBtn.enable = false;
+    end
 end
 
+
+
+-----------------------    ISUserPanelUI        ---------------------------
+
+
+
+local hookCreate = ISUserPanelUI.createChildren
+function ISUserPanelUI:createChildren()
+    hookCreate(self)
+    self.FactionLock = ISTickBox:new(173, 180, 150, 25, "Faction Lock", self, function()
+        local isLocked = not ClanRestrictions.isFactionLocked()
+        ClanRestrictions.setFactionLocked(isLocked)
+    end)
+    self.FactionLock:initialise()
+    self.FactionLock:instantiate()
+    self.FactionLock.selected[1] = ClanRestrictions.isFactionLocked()
+    self.FactionLock:addOption("Faction Lock")
+    self:addChild(self.FactionLock)
+end
+
+local hookUpdate = ISUserPanelUI.updateButtons
+function ISUserPanelUI:updateButtons()
+    hookUpdate(self)
+    local isLocked = ClanRestrictions.isFactionLocked()
+    local sufix = isLocked and " [LOCKED]" or " [UNLOCKED]"
+    self.factionBtn.enable = not isLocked
+    self.factionBtn.title   = getText("UI_userpanel_factionpanel") .. sufix
+    self.factionBtn.tooltip = getText("UI_userpanel_factionpanel") .. sufix
+    if isLocked then
+        self.factionBtn.borderColor = {r=1, g=0.4, b=0.4, a=1}
+    else
+        self.factionBtn.borderColor = {r=0.4, g=0.4, b=0.4, a=1}
+    end
+    self.FactionLock.enable = ClanRestrictions.isAdm(getPlayer())
+end
+
+local hookOption = ISUserPanelUI.onOptionMouseDown
+function ISUserPanelUI:onOptionMouseDown(button, x, y)
+    if button.internal == "FACTIONPANEL" then
+        if ISFactionUI.instance then ISFactionUI.instance:close() end
+        if ISCreateFactionUI.instance then ISCreateFactionUI.instance:close() end
+        if Faction.isAlreadyInFaction(self.player) then
+            local modal = ISFactionUI:new(getCore():getScreenWidth() / 2 - 250, getCore():getScreenHeight() / 2 - 225, 500, 450, Faction.getPlayerFaction(self.player), self.player)
+            modal:initialise()
+            modal:addToUIManager()
+        else
+            local modal = ISCreateFactionUI:new(self.x + 100, self.y + 100, 350, 250, self.player)
+            modal:initialise()
+            modal:addToUIManager()
+        end
+    else
+        hookOption(self, button, x, y)
+    end
+end
+ 
+
+
+
 -----------------------            ---------------------------
+--[[ 
 local adminHook = ISAdminPanelUI.updateButtons
 function ISAdminPanelUI:updateButtons()
     adminHook(self)
     self.seeFactionBtn.enable = not ClanRestrictions.isFactionLocked() 
-end
+end ]]

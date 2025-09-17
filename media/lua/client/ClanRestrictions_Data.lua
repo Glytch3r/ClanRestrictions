@@ -1,3 +1,4 @@
+-- client/ClanRestrictions_Data.lua
 ClanRestrictions = ClanRestrictions or {}
 
 function ClanRestrictions.init()
@@ -6,38 +7,41 @@ end
 Events.OnInitGlobalModData.Add(ClanRestrictions.init)
 
 function ClanRestrictions.receivedData(key, data)
-    if key == "ClanRestrictionsData" or key == "ClanRestrictions" then
-        ClanRestrictions.save(key, data)
-    end
-end
-Events.OnReceiveGlobalModData.Add(ClanRestrictions.receivedData)
-
-function ClanRestrictions.save(key, data)
-    if (key == "ClanRestrictionsData" or key == "ClanRestrictions") and data then
+    if key == "ClanRestrictionsData" then
         for k, v in pairs(data) do
             ClanRestrictionsData[k] = v
         end
-        for k, _ in pairs(ClanRestrictionsData) do
+        for k in pairs(ClanRestrictionsData) do
             if data[k] == nil then
                 ClanRestrictionsData[k] = nil
             end
         end
-        return ClanRestrictionsData
+    end
+end
+Events.OnReceiveGlobalModData.Add(ClanRestrictions.receivedData)
+
+function ClanRestrictions.sendToServer()
+    if isClient() then
+        sendClientCommand("ClanRestrictions", "Update", { data = ClanRestrictionsData })
+    end
+end
+
+function ClanRestrictions.request()
+    if isClient() then
+        sendClientCommand("ClanRestrictions", "RequestSync", {})
     end
 end
 
 function ClanRestrictions.core(module, command, args)
-    local pl = getPlayer()
-    if module == "ClanRestrictions" then
-        if command == "Fetch" and args.data then
-            ClanRestrictionsData = ModData.getOrCreate("ClanRestrictionsData")
-        elseif command == "Sync" and args.data then
-            for k, v in pairs(args.data) do
-                ClanRestrictionsData[k] = v
-            end
-        elseif command == "Msg" and args.msg then
-            print(tostring(args.msg))
-            if pl then pl:Say(args.msg) end
+    if module ~= "ClanRestrictions" then return end
+    if command == "Update" and args.data then
+        for k, v in pairs(args.data) do
+            ClanRestrictionsData[k] = v
+        end
+    elseif command == "Msg" and args.msg then
+        local pl = getPlayer()
+        if pl then
+            pl:setHaloNote(tostring(args.msg),150,250,150,400)
         end
     end
 end

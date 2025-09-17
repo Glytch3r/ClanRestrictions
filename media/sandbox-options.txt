@@ -25,6 +25,13 @@ option ClanRestrictions.OfficersCanInvite
 }
 
 
+option ClanRestrictions.OfficersAssignRank
+{
+	type = boolean, default = true,
+	page = ClanRestrictions, translation = ClanRestrictions_OfficersAssignRank,
+}
+
+
 option ClanRestrictions.AnySquareAccess
 {
 	type = boolean, default = false,

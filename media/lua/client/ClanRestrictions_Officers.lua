@@ -48,15 +48,16 @@ function ClanRestrictions.getOfficersStr(sh)
     return tostring(ClanRestrictions.getOfficersCount(sh)) .. "/" .. tostring(max)
 end
 
-function ClanRestrictions.setOfficer(targUser, isRemove)
+function ClanRestrictions.setOfficer(targUser, isPromote)
     if not targUser then return end
     ClanRestrictionsData.officers = ClanRestrictionsData.officers or {}
-    if isRemove then
-        ClanRestrictionsData.officers[targUser] = nil
+    if isPromote then
+        ClanRestrictionsData.officers[targUser] = true     
     else
-        ClanRestrictionsData.officers[targUser] = true
+        ClanRestrictionsData.officers[targUser] = nil
     end
-    ModData.transmit("ClanRestrictionsData")
+    --ModData.transmit("ClanRestrictionsData")
+    ClanRestrictions.sendToServer()
 end
 
 function ClanRestrictions.isOfficer(plOrUser, sh)

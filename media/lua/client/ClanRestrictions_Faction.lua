@@ -189,14 +189,6 @@ Events.OnPlayerUpdate.Add(ClanRestrictions.FactionLockHandler)
 
 
 
-local hook = ISFactionsList.prerender
-function ISFactionsList:prerender()
-    hook(self)
-    if ClanRestrictions.isFactionLocked() then   
-        self.viewBtn.enable = false;
-    end
-end
-
 
 
 --[[ 
