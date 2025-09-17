@@ -60,7 +60,6 @@ function ClanRestrictions.context(player, context, worldobjects, test)
     local user = pl:getUsername()
     local playerSh = SafeHouse.hasSafehouse(user)
     if not playerSh then return end
-
     if not SandboxVars.ClanRestrictions.AnySquareAccess then
         if not SafeHouse.getSafeHouse(sq) or SafeHouse.getSafeHouse(sq) ~= playerSh then
             return

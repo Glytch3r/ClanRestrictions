@@ -17,6 +17,9 @@ Sandbox_EN = {
 	Sandbox_ClanRestrictions_AnySquareAccess = "Any Square Access",
 	Sandbox_ClanRestrictions_AnySquareAccess_tooltip  = "Safehouse Contextmenu is always available",
 
+	Sandbox_ClanRestrictions_AutoKicker = "Same Faction Safehouse",
+	Sandbox_ClanRestrictions_AutoKicker_tooltip = "Auto kicks members of Safehouse that are not the same faction as the Safehouse Owner",
+
     
 }
 

@@ -37,3 +37,8 @@ option ClanRestrictions.AnySquareAccess
 	type = boolean, default = false,
 	page = ClanRestrictions, translation = ClanRestrictions_AnySquareAccess,
 } 
+option ClanRestrictions.AutoKicker
+{
+	type = boolean, default = false,
+	page = ClanRestrictions, translation = ClanRestrictions_AutoKicker,
+}
