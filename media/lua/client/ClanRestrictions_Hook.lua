@@ -135,56 +135,46 @@ end
 
 
 -----------------------    ISUserPanelUI        ---------------------------
-
-
-
 local hookCreate = ISUserPanelUI.createChildren
 function ISUserPanelUI:createChildren()
     hookCreate(self)
-    self.FactionLock = ISTickBox:new(173, 180, 150, 25, "Faction Lock", self, function()
-        local isLocked = not ClanRestrictions.isFactionLocked()
-        ClanRestrictions.setFactionLocked(isLocked)
-    end)
+
+    self.FactionLock = ISTickBox:new(
+        173, 180, 150, 25,
+        "Faction Lock",
+        self,
+        function()
+            local locked = not ClanRestrictions.isFactionLocked()
+            ClanRestrictions.setFactionLocked(locked)
+        end
+    )
     self.FactionLock:initialise()
     self.FactionLock:instantiate()
     self.FactionLock.selected[1] = ClanRestrictions.isFactionLocked()
     self.FactionLock:addOption("Faction Lock")
     self:addChild(self.FactionLock)
 end
---[[ 
-local hookUpdate = ISUserPanelUI.updateButtons
-function ISUserPanelUI:updateButtons()
-    hookUpdate(self)
-    local isLocked = ClanRestrictions.isFactionLocked()
-    local sufix = isLocked and " [LOCKED]" or " [UNLOCKED]"
-    self.factionBtn.enable = not isLocked
-    self.factionBtn.title   = getText("UI_userpanel_factionpanel") .. sufix
-    self.factionBtn.tooltip = getText("UI_userpanel_factionpanel") .. sufix
-    if isLocked then
-        self.factionBtn.borderColor = {r=1, g=0.4, b=0.4, a=1}
-    else
-        self.factionBtn.borderColor = {r=0.4, g=0.4, b=0.4, a=1}
-    end
-    self.FactionLock.enable = ClanRestrictions.isAdm(getPlayer())
-end
-
- ]]
 
 local hookUpdate = ISUserPanelUI.updateButtons
 function ISUserPanelUI:updateButtons()
     hookUpdate(self)
-    local isLocked = ClanRestrictions.isFactionLocked()
-    local sufix    = isLocked and " [LOCKED]" or " [UNLOCKED]"
-    self.factionBtn.enable  = not isLocked
-    self.factionBtn.title   = getText("UI_userpanel_factionpanel") .. sufix
-    self.factionBtn.tooltip = getText("UI_userpanel_factionpanel") .. sufix
-    self.factionBtn.borderColor = isLocked and {r=1,   g=0.4, b=0.4, a=1}  or  {r=0.4, g=0.4, b=0.4, a=1}
-    self.FactionLock.selected[1] = isLocked
-    self.FactionLock.enable = ClanRestrictions.isAdm(getPlayer())
+
+    local locked = ClanRestrictions.isFactionLocked()
+    local suffix = locked and " [LOCKED]" or " [UNLOCKED]"
+
+    self.factionBtn.enable  = not locked
+    self.factionBtn.title   = getText("UI_userpanel_factionpanel") .. suffix
+    self.factionBtn.tooltip = getText("UI_userpanel_factionpanel") .. suffix
+    self.factionBtn.borderColor = locked
+        and { r = 1,   g = 0.4, b = 0.4, a = 1 }
+         or { r = 0.4, g = 0.4, b = 0.4, a = 1 }
+
+  --  self.FactionLock.selected[1] = locked
+
+    local isAdmin = ClanRestrictions.isAdm(self.player)
+
+    self.FactionLock.enable = isAdmin
 end
-
-
-
 
 local hookOption = ISUserPanelUI.onOptionMouseDown
 function ISUserPanelUI:onOptionMouseDown(button, x, y)
@@ -211,6 +201,25 @@ Events.OnCreatePlayer.Add(function()
         ISUserPanelUI.instance = nil
     end
 end)
+
+--[[ 
+
+local hookUpdate = ISUserPanelUI.updateButtons
+function ISUserPanelUI:updateButtons()
+    hookUpdate(self)
+    local isLocked = ClanRestrictions.isFactionLocked()
+    local sufix    = isLocked and " [LOCKED]" or " [UNLOCKED]"
+    self.factionBtn.enable  = not isLocked
+    self.factionBtn.title   = getText("UI_userpanel_factionpanel") .. sufix
+    self.factionBtn.tooltip = getText("UI_userpanel_factionpanel") .. sufix
+    self.factionBtn.borderColor = isLocked and {r=1,   g=0.4, b=0.4, a=1}  or  {r=0.4, g=0.4, b=0.4, a=1}
+    --self.FactionLock.selected[1] = isLocked
+    self.FactionLock.enable = ClanRestrictions.isAdm(getPlayer())
+end
+
+
+
+ ]]
 
 
 
