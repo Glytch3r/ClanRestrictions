@@ -24,8 +24,7 @@
 ClanRestrictions = ClanRestrictions or {}
 
 function ClanRestrictions.isFactionLocked()
-    ClanRestrictionsData.isFactionLocked = ClanRestrictionsData.isFactionLocked or false
-    
+    ClanRestrictionsData.isFactionLocked = ClanRestrictionsData.isFactionLocked or true
     return ClanRestrictionsData.isFactionLocked
 end
 

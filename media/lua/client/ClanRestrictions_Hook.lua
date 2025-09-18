@@ -157,6 +157,24 @@ function ISUserPanelUI:updateButtons()
     self.FactionLock.enable = ClanRestrictions.isAdm(getPlayer())
 end
 
+
+
+local hookUpdate = ISUserPanelUI.updateButtons
+function ISUserPanelUI:updateButtons()
+    hookUpdate(self)
+    local isLocked = ClanRestrictions.isFactionLocked()
+    local sufix    = isLocked and " [LOCKED]" or " [UNLOCKED]"
+    self.factionBtn.enable  = not isLocked
+    self.factionBtn.title   = getText("UI_userpanel_factionpanel") .. sufix
+    self.factionBtn.tooltip = getText("UI_userpanel_factionpanel") .. sufix
+    self.factionBtn.borderColor = isLocked and {r=1,   g=0.4, b=0.4, a=1}  or  {r=0.4, g=0.4, b=0.4, a=1}
+    self.FactionLock.selected[1] = isLocked
+    self.FactionLock.enable = ClanRestrictions.isAdm(getPlayer())
+end
+
+
+
+
 local hookOption = ISUserPanelUI.onOptionMouseDown
 function ISUserPanelUI:onOptionMouseDown(button, x, y)
     if button.internal == "FACTIONPANEL" then
@@ -175,7 +193,13 @@ function ISUserPanelUI:onOptionMouseDown(button, x, y)
         hookOption(self, button, x, y)
     end
 end
- 
+
+Events.OnCreatePlayer.Add(function()
+    if ISUserPanelUI.instance then
+        ISUserPanelUI.instance:close()
+        ISUserPanelUI.instance = nil
+    end
+end)
 
 
 
