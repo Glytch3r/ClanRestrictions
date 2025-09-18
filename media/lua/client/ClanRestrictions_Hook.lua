@@ -48,17 +48,28 @@ function ISSafehouseUI:updateButtons()
     self.addPlayer.enable    = (isOwner or hasPrivilegedAccessLevel or canOfficerInvite) and not isFull
 end
 -----------------------   ISSafehouseAddPlayerUI         ---------------------------
-local hook = ISSafehouseAddPlayerUI.prerender
+local hookPrerender = ISSafehouseAddPlayerUI.prerender
 function ISSafehouseAddPlayerUI:prerender()
-    hook(self)
+    hookPrerender(self)
 
-    local pl = getPlayer()
-    local myFaction = Faction.getPlayerFaction(pl:getUsername())
-    local sel = self.selectedPlayer
-    local targetFaction = sel and Faction.getPlayerFaction(sel) or nil
-
-    if sel and myFaction and targetFaction and myFaction:getName() ~= targetFaction:getName() then
+    local targUser = self.selectedPlayer
+    if not targUser then
         self.addPlayer.enable = false
+        return
+    end
+
+    local user   = getPlayer():getUsername()
+    local plFac    = Faction.getPlayerFaction(user)
+    local targFac  = Faction.getPlayerFaction(targUser)
+    if plFac and targFac and plFac:getName() ~= targFac:getName() then
+        self.addPlayer.enable = false
+        return
+    end
+
+    local sh = SafeHouse.hasSafehouse(user)
+    if sh and ClanRestrictions.isFull(sh) then
+        self.addPlayer.enable = false
+        return
     end
 end
 
