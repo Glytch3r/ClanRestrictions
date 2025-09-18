@@ -151,7 +151,7 @@ function ISUserPanelUI:createChildren()
     self.FactionLock:addOption("Faction Lock")
     self:addChild(self.FactionLock)
 end
-
+--[[ 
 local hookUpdate = ISUserPanelUI.updateButtons
 function ISUserPanelUI:updateButtons()
     hookUpdate(self)
@@ -168,7 +168,7 @@ function ISUserPanelUI:updateButtons()
     self.FactionLock.enable = ClanRestrictions.isAdm(getPlayer())
 end
 
-
+ ]]
 
 local hookUpdate = ISUserPanelUI.updateButtons
 function ISUserPanelUI:updateButtons()
