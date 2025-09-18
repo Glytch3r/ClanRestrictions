@@ -126,7 +126,7 @@ function ClanRestrictions.context(player, context, worldobjects, test)
                 playerSh:removePlayer(targUser)
                 context:hideAndChildren()
             end)
-            if not canOffKick and not (isOwner or isAdmin) then
+            if not canKick then
                 kickOpt.notAvailable = true
             end
         end

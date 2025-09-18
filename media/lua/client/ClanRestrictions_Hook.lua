@@ -135,6 +135,7 @@ end
 
 
 -----------------------    ISUserPanelUI        ---------------------------
+
 local hookCreate = ISUserPanelUI.createChildren
 function ISUserPanelUI:createChildren()
     hookCreate(self)
